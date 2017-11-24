@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerMovementScript : MonoBehaviour
 {
 
-    public string m_moveStatus = "idle";
+    //public string m_moveStatus = "idle";
     public float m_gravity = 20.0f;
 
 	//public Collider m_weaponHitBox;
@@ -43,7 +43,7 @@ public class PlayerMovementScript : MonoBehaviour
 
     void Update()
     {
-        m_moveStatus = "idle";
+        //m_moveStatus = "idle";
 
         //hold run to run
         if (Input.GetAxis("Run") != 0)
@@ -79,7 +79,9 @@ public class PlayerMovementScript : MonoBehaviour
 				m_animationController.SetBool("isWalking",false);
 			}
 
-			m_animationController.SetFloat("Speed",m_moveDirection.z);
+			m_animationController.SetFloat("Speed",m_moveDirection.magnitude);
+			m_animationController.SetFloat("DirectionLR",m_moveDirection.normalized.x);
+			m_animationController.SetFloat("DirectionFB",m_moveDirection.normalized.z);
 			//m_animationController.SetFloat("Direction",m_moveDirection.x);
 
 			//transform direction
@@ -105,10 +107,11 @@ public class PlayerMovementScript : MonoBehaviour
 
 		//reset jumping after grounded
 		m_jumping = m_grounded ? false : m_jumping;
-
+		/*
 		if(m_jumping){
 			m_moveStatus = "jump";
 		}
+		*/
 
 		//is the player attacking?
 		AnimatorStateInfo currentUpperTorsoState = m_animationController.GetCurrentAnimatorStateInfo(1);
