@@ -24,10 +24,12 @@ public class MutantControl : MonoBehaviour {
 
 		if(Input.GetButtonDown("Jump")){
 			my_anim.SetTrigger("isJumping");
+			my_anim.SetBool("isIdle", false);
 
 		}
 		if(translation != 0){
-			my_anim.SetBool("isRunning",true);		
+			my_anim.SetBool("isRunning",true);
+			my_anim.SetBool("isIdle", true);		
 			
 		}else{
 			my_anim.SetBool("isRunning",false);
