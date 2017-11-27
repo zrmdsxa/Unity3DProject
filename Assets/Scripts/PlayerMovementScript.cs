@@ -15,8 +15,8 @@ public class PlayerMovementScript : MonoBehaviour
     public float m_jumpSpeed = 8.0f;
     public float m_runSpeed = 10.0f;
     public float m_walkSpeed = 4.0f;
-    public float m_turnSpeed = 250.0f;
-    public float m_moveBackwardsMultiplier = 0.75f;
+    //public float m_turnSpeed = 250.0f;
+    //public float m_moveBackwardsMultiplier = 0.75f;
 	//public Transform mesh;
 
     //internal variables
@@ -46,23 +46,26 @@ public class PlayerMovementScript : MonoBehaviour
         //m_moveStatus = "idle";
 
         //hold run to run
+
+
         if (Input.GetAxis("Run") != 0)
         {
-            m_isWalking = true;
+            m_isWalking = false;
 			m_animationController.SetBool("isRunning",true);
 
         } else{
-			m_isWalking = false;
+			m_isWalking = true;
 			m_animationController.SetBool("isRunning",false);
 		}
 
         if (m_grounded)
         {
+			
 
 			m_moveDirection = new Vector3(Input.GetAxis("Horizontal"),0,Input.GetAxis("Vertical"));
 
 			//use the run of the walkspeed
-			m_moveDirection *= m_isWalking ? m_walkSpeed*m_speedMultiplier : m_runSpeed * m_speedMultiplier;
+			m_moveDirection *= m_isWalking ? m_walkSpeed : m_runSpeed;
 
 			//jump
 			if(Input.GetButton("Jump")){
@@ -80,17 +83,22 @@ public class PlayerMovementScript : MonoBehaviour
 			}
 
 			m_animationController.SetFloat("Speed",m_moveDirection.magnitude);
-			m_animationController.SetFloat("DirectionLR",m_moveDirection.normalized.x);
-			m_animationController.SetFloat("DirectionFB",m_moveDirection.normalized.z);
-			//m_animationController.SetFloat("Direction",m_moveDirection.x);
+			m_animationController.SetFloat("DirectionLR",m_moveDirection.x);
+			m_animationController.SetFloat("DirectionFB",m_moveDirection.z);
 
 			//transform direction
+			if (m_moveDirection.magnitude > m_runSpeed){
+				m_moveDirection = m_moveDirection.normalized * m_runSpeed;
+			}
 			m_moveDirection = transform.TransformDirection(m_moveDirection);
 			
 
 
         }//end if grounded
-
+		else{
+			
+		}
+		
 		//Character must face the same direction as the camera when the right mouse button is down
 		// if(Input.GetMouseButton(1)){
 		// 	transform.rotation = Quaternion.Euler(0,Camera.main.transform.eulerAngles.y,0);
@@ -101,12 +109,21 @@ public class PlayerMovementScript : MonoBehaviour
 		//apply gravity
 		m_moveDirection.y -= m_gravity * Time.deltaTime;
 		
-		Debug.Log(m_moveDirection);
+		//Debug.Log(m_moveDirection);
 		//move character controller and check if grounded
 		m_grounded = ((m_controller.Move(m_moveDirection * Time.deltaTime)) & CollisionFlags.Below) !=0 ;
 
 		//reset jumping after grounded
 		m_jumping = m_grounded ? false : m_jumping;
+		//Debug.Log(m_jumping);
+		if (m_jumping){
+			m_animationController.SetBool("Jump",true);
+		}
+		else{
+			m_animationController.SetBool("Jump",false);
+		}
+		
+		
 		/*
 		if(m_jumping){
 			m_moveStatus = "jump";
