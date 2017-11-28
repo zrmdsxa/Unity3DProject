@@ -51,11 +51,11 @@ public class PlayerMovementScript : MonoBehaviour
         if (Input.GetAxis("Run") != 0)
         {
             m_isWalking = false;
-			m_animationController.SetBool("isRunning",true);
+			//m_animationController.SetBool("isRunning",true);
 
         } else{
 			m_isWalking = true;
-			m_animationController.SetBool("isRunning",false);
+			//m_animationController.SetBool("isRunning",false);
 		}
 
         if (m_grounded)
@@ -76,10 +76,10 @@ public class PlayerMovementScript : MonoBehaviour
 
 			//tell the animator whats going on
 			if(m_moveDirection.z != 0){	//TODO: Fuck you magic number
-				m_animationController.SetBool("isWalking",true);
+				//m_animationController.SetBool("isWalking",true);
 			}
 			else{
-				m_animationController.SetBool("isWalking",false);
+				//m_animationController.SetBool("isWalking",false);
 			}
 
 			m_animationController.SetFloat("Speed",m_moveDirection.magnitude);
@@ -131,7 +131,7 @@ public class PlayerMovementScript : MonoBehaviour
 		*/
 
 		//is the player attacking?
-		AnimatorStateInfo currentUpperTorsoState = m_animationController.GetCurrentAnimatorStateInfo(1);
+		//AnimatorStateInfo currentUpperTorsoState = m_animationController.GetCurrentAnimatorStateInfo(1);
 		// if (currentUpperTorsoState.fullPathHash == m_attackState){
 		// 	//m_weaponHitBox.enabled = true;
 		// }

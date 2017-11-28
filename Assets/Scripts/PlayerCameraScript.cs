@@ -46,7 +46,7 @@ public class PlayerCameraScript : MonoBehaviour {
 
 		m_hand.rotation = rotation2;
 
-		Debug.Log(m_hand.rotation.eulerAngles.x);
+		//Debug.Log(m_hand.rotation.eulerAngles.x);
 
 	}
 	//ClampAngle - keeps the angle between 0 and 360 degrees
