@@ -20,8 +20,9 @@ public class GameManager : MonoBehaviour
 
 	public GameObject[] m_playerCharacters;
 
-	public int m_playerSelected = 1;
+	public int m_playerSelected = 0;
 
+	public Dropdown m_dropdown;
 	
 	
 
@@ -107,5 +108,10 @@ public class GameManager : MonoBehaviour
 		SceneManager.LoadScene(1);
 		ChangeGameState(GameState.Play);
 		m_gameTimer = m_gameLength;
+	}
+
+	public void ChangeCharacter(){
+		Debug.Log("Menu changed char");
+		m_playerSelected = m_dropdown.value;
 	}
 }
