@@ -20,7 +20,7 @@ public class PlayerMovementScript : MonoBehaviour
 	//public Transform mesh;
 
     //internal variables
-    private float m_speedMultiplier = 1.0f;
+    //private float m_speedMultiplier = 1.0f;
     private bool m_grounded = false;
     private Vector3 m_moveDirection = Vector3.zero;
     private bool m_isWalking = false;
