@@ -8,7 +8,7 @@ public class PlayerMovementScript : MonoBehaviour
     //public string m_moveStatus = "idle";
     public float m_gravity = 20.0f;
 
-	//public Collider m_weaponHitBox;
+    //public Collider m_weaponHitBox;
 
     //movement speeds
 
@@ -17,7 +17,7 @@ public class PlayerMovementScript : MonoBehaviour
     public float m_walkSpeed = 4.0f;
     //public float m_turnSpeed = 250.0f;
     //public float m_moveBackwardsMultiplier = 0.75f;
-	//public Transform mesh;
+    //public Transform mesh;
 
     //internal variables
     //private float m_speedMultiplier = 1.0f;
@@ -25,20 +25,22 @@ public class PlayerMovementScript : MonoBehaviour
     private Vector3 m_moveDirection = Vector3.zero;
     private bool m_isWalking = false;
     private bool m_jumping = false;
-	private bool m_mouseSideDown = false;
+
+    private bool m_isAlive = true;
+    private bool m_mouseSideDown = false;
     private CharacterController m_controller;
     private Animator m_animationController;
 
-	private int m_attackState;
+    private int m_attackState;
 
     void Awake()
     {
         //get the controllers
         m_controller = GetComponent<CharacterController>();
         m_animationController = GetComponent<Animator>();
-		m_attackState = Animator.StringToHash("UpperTorso.attack");
+        m_attackState = Animator.StringToHash("UpperTorso.attack");
 
-		//m_weaponHitBox.enabled = false;
+        //m_weaponHitBox.enabled = false;
     }
 
     void Update()
@@ -46,102 +48,98 @@ public class PlayerMovementScript : MonoBehaviour
         //m_moveStatus = "idle";
 
         //hold run to run
-
-
-        if (Input.GetAxis("Run") != 0)
+        if (m_isAlive)
         {
-            m_isWalking = false;
-			//m_animationController.SetBool("isRunning",true);
 
-        } else{
-			m_isWalking = true;
-			//m_animationController.SetBool("isRunning",false);
-		}
+            if (Input.GetAxis("Run") != 0)
+            {
+                m_isWalking = false;
+                //m_animationController.SetBool("isRunning",true);
 
-        if (m_grounded)
-        {
-			
+            }
+            else
+            {
+                m_isWalking = true;
+                //m_animationController.SetBool("isRunning",false);
+            }
 
-			m_moveDirection = new Vector3(Input.GetAxis("Horizontal"),0,Input.GetAxis("Vertical"));
-
-			//use the run of the walkspeed
-			m_moveDirection *= m_isWalking ? m_walkSpeed : m_runSpeed;
-
-			//jump
-			if(Input.GetButton("Jump")){
-				m_jumping = true;
-				m_moveDirection.y = m_jumpSpeed;
-
-			}
-
-			//tell the animator whats going on
-			if(m_moveDirection.z != 0){	//TODO: Fuck you magic number
-				//m_animationController.SetBool("isWalking",true);
-			}
-			else{
-				//m_animationController.SetBool("isWalking",false);
-			}
-
-			m_animationController.SetFloat("Speed",m_moveDirection.magnitude);
-			m_animationController.SetFloat("DirectionLR",m_moveDirection.x);
-			m_animationController.SetFloat("DirectionFB",m_moveDirection.z);
-
-			//transform direction
-			if (m_moveDirection.magnitude > m_runSpeed){
-				m_moveDirection = m_moveDirection.normalized * m_runSpeed;
-			}
-			m_moveDirection = transform.TransformDirection(m_moveDirection);
-			
+            if (m_grounded)
+            {
 
 
-        }//end if grounded
-		else{
-			
-		}
-		
-		//Character must face the same direction as the camera when the right mouse button is down
-		// if(Input.GetMouseButton(1)){
-		// 	transform.rotation = Quaternion.Euler(0,Camera.main.transform.eulerAngles.y,0);
-		// }
-		// else{
-		// 	transform.Rotate(0,Input.GetAxis("Horizontal") * m_turnSpeed * Time.deltaTime,0);
-		// }
-		//apply gravity
-		m_moveDirection.y -= m_gravity * Time.deltaTime;
-		
-		//Debug.Log(m_moveDirection);
-		//move character controller and check if grounded
-		m_grounded = ((m_controller.Move(m_moveDirection * Time.deltaTime)) & CollisionFlags.Below) !=0 ;
+                m_moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
 
-		//reset jumping after grounded
-		m_jumping = m_grounded ? false : m_jumping;
-		//Debug.Log(m_jumping);
-		if (m_jumping){
-			m_animationController.SetBool("Jump",true);
-		}
-		else{
-			m_animationController.SetBool("Jump",false);
-		}
-		
-		
-		/*
-		if(m_jumping){
-			m_moveStatus = "jump";
-		}
-		*/
+                //use the run of the walkspeed
+                m_moveDirection *= m_isWalking ? m_walkSpeed : m_runSpeed;
 
-		//is the player attacking?
-		//AnimatorStateInfo currentUpperTorsoState = m_animationController.GetCurrentAnimatorStateInfo(1);
-		// if (currentUpperTorsoState.fullPathHash == m_attackState){
-		// 	//m_weaponHitBox.enabled = true;
-		// }
-		// else{
-		// 	if(Input.GetButtonDown("Attack")){
-		// 		m_animationController.SetBool("isAttacking",true);
-		// 	}else{
-		// 		m_animationController.SetBool("isAttacking",false);
-		// 		//m_weaponHitBox.enabled = false;
-		// 	}
-		// }
+                //jump
+                if (Input.GetButton("Jump"))
+                {
+                    m_jumping = true;
+                    m_moveDirection.y = m_jumpSpeed;
+
+                }
+
+                //tell the animator whats going on
+                if (m_moveDirection.z != 0)
+                {   //TODO: Fuck you magic number
+                    //m_animationController.SetBool("isWalking",true);
+                }
+                else
+                {
+                    //m_animationController.SetBool("isWalking",false);
+                }
+
+                m_animationController.SetFloat("Speed", m_moveDirection.magnitude);
+                m_animationController.SetFloat("DirectionLR", m_moveDirection.x);
+                m_animationController.SetFloat("DirectionFB", m_moveDirection.z);
+
+                //transform direction
+                if (m_moveDirection.magnitude > m_runSpeed)
+                {
+                    m_moveDirection = m_moveDirection.normalized * m_runSpeed;
+                }
+                m_moveDirection = transform.TransformDirection(m_moveDirection);
+
+
+
+            }//end if grounded
+            else
+            {
+
+            }
+
+            //Character must face the same direction as the camera when the right mouse button is down
+            // if(Input.GetMouseButton(1)){
+            // 	transform.rotation = Quaternion.Euler(0,Camera.main.transform.eulerAngles.y,0);
+            // }
+            // else{
+            // 	transform.Rotate(0,Input.GetAxis("Horizontal") * m_turnSpeed * Time.deltaTime,0);
+            // }
+            //apply gravity
+            m_moveDirection.y -= m_gravity * Time.deltaTime;
+
+            //Debug.Log(m_moveDirection);
+            //move character controller and check if grounded
+            m_grounded = ((m_controller.Move(m_moveDirection * Time.deltaTime)) & CollisionFlags.Below) != 0;
+
+            //reset jumping after grounded
+            m_jumping = m_grounded ? false : m_jumping;
+            //Debug.Log(m_jumping);
+            if (m_jumping)
+            {
+                m_animationController.SetBool("Jump", true);
+            }
+            else
+            {
+                m_animationController.SetBool("Jump", false);
+            }
+
+        }
+
     }
+
+	public void PlayerDied(){
+		m_isAlive = false;
+	}
 }

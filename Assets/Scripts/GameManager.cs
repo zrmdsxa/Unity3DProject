@@ -20,18 +20,21 @@ public class GameManager : MonoBehaviour
 
 	public GameObject[] m_playerCharacters;
 
-	public int m_playerSelected = 0;
-
-	public Dropdown m_dropdown;
-	
 	
 
+	public Dropdown m_dropdownCharacter;
+    public Dropdown m_dropdownLevel;
+	
 
 	//private
 
     float m_introTimer = 1.0f;
 
 	float m_gameTimer = 301.0f;
+
+    public int m_playerSelected = 0;//must be public for spawning
+
+    int m_levelSelected = 1;
 	
 
     void Awake()
@@ -105,13 +108,23 @@ public class GameManager : MonoBehaviour
 	}
 
 	public void MenuButtonPlay(){
-		SceneManager.LoadScene(2);
+		SceneManager.LoadScene(m_levelSelected);
 		ChangeGameState(GameState.Play);
 		m_gameTimer = m_gameLength;
 	}
 
 	public void ChangeCharacter(){
 		Debug.Log("Menu changed char");
-		m_playerSelected = m_dropdown.value;
+		m_playerSelected = m_dropdownCharacter.value;
 	}
+
+    public void ChangeLevel(){
+        Debug.Log("Menu changed level");
+		m_levelSelected = m_dropdownLevel.value+1;
+    }
+
+    public void GameOver(){
+        ChangeGameState(GameState.Lose);
+        GetComponent<PlayerMovementScript>().PlayerDied();
+    }
 }
