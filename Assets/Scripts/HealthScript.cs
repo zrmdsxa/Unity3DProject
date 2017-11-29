@@ -80,8 +80,12 @@ PlayerMovement playerMovement;                              // Reference to the 
         if (m_currentHP > 0)
         {
             m_currentHP -= damage;
+            if(m_isPlayer){
+damaged = true;
+UpdateHealthBar();
+            }
             Debug.Log(m_currentHP);
-            damaged = true;
+            
             if (m_currentHP <= 0)
             {
                 if (m_isPlayer)
@@ -117,7 +121,7 @@ PlayerMovement playerMovement;                              // Reference to the 
         Debug.Log("playertdie");
         anima.SetBool("isDead", true);
         //GetComponent<NavMeshAgent>().enabled=false;
-        Destroy(gameObject, 3f);
+       // Destroy(gameObject, 3f);
     }
     void EnemyDie()
     {Debug.Log("enemydie");
