@@ -25,10 +25,10 @@ public class HealthScript : MonoBehaviour
     {
         if (!m_isPlayer)
         {
-            // if (Input.GetKeyDown(KeyCode.K))
-            // {
-            //     TakeDamage(999f);
-            // }
+             if (Input.GetKeyDown(KeyCode.K))
+             {
+                 TakeDamage(999f);
+             }
         }
     }
 
