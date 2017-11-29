@@ -27,7 +27,7 @@ namespace CompleteProject
         void Update ()
         {
             anim.SetFloat("crawlSpeed",nav.speed);
-            Debug.Log(nav.speed);
+//            Debug.Log(nav.speed);
 
           //  If the enemy and the player have health left...
             if(enemyHealth.m_currentHP > 0 && playerHealth.m_currentHP > 0)

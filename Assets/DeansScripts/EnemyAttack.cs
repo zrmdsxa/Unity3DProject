@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace CompleteProject
-{
+
+
     public class EnemyAttack : MonoBehaviour
     {
         public float timeBetweenAttacks = 0.5f;     // The time in seconds between each attack.
@@ -11,14 +11,17 @@ namespace CompleteProject
 
         Animator anim;                              // Reference to the animator component.
 
-
+        HealthScript playerHealth;
         HealthScript enemyHealth;                    // Reference to this enemy's health.
         bool playerInRange;                         // Whether player is within the trigger collider and can be attacked.
-        float timer;                                // Timer for counting up to the next attack.
+        float timer;    
+        GameObject thePlayer;                            // Timer for counting up to the next attack.
 
 
         void Awake ()
         {
+            thePlayer = GameObject.FindGameObjectWithTag ("Player");
+            playerHealth = thePlayer.GetComponent<HealthScript>();
 
 
             enemyHealth = GetComponent<HealthScript>();
@@ -29,11 +32,11 @@ namespace CompleteProject
         void OnTriggerEnter (Collider other)
         {
             // If the entering collider is the player...
-            Debug.Log(other);
+//            Debug.Log(other);
             if(other.tag == "Player")
             {  
                  anim.SetBool ("isAttacking",true);
-                 Debug.Log(anim.GetBool("isPouncing"));
+//                 Debug.Log(anim.GetBool("isPouncing"));
 
                 // ... the player is in range.
                 playerInRange = true;
@@ -87,4 +90,3 @@ namespace CompleteProject
             // }
         }
     }
-}

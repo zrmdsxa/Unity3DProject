@@ -6,7 +6,7 @@ public class Health : MonoBehaviour {
 	public int m_MaxHP = 100;
 	public float m_deathTime = 3f;
 	public float m_hitRect = 0.1f;
-	private int m_currenthealth;
+	public  int m_currenthealth;
 	private Animator m_animController;
 	private float m_hitDelay;
 	private Transform m_argoTarget;

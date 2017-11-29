@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour
 	}
 
 	public void MenuButtonPlay(){
-		SceneManager.LoadScene(1);
+		SceneManager.LoadScene(2);
 		ChangeGameState(GameState.Play);
 		m_gameTimer = m_gameLength;
 	}
