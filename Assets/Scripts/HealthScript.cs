@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.AI;
 
 public class HealthScript : MonoBehaviour
 {
@@ -81,7 +82,7 @@ public class HealthScript : MonoBehaviour
     void EnemyDie()
     {Debug.Log("enemydie");
         anima.SetBool("isDead", true);
-        
+        GetComponent<NavMeshAgent>().enabled=false;
         Destroy(gameObject, 3f);
     }
 }
