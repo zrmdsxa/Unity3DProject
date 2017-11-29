@@ -32,7 +32,7 @@ namespace CompleteProject
             Debug.Log(other);
             if(other.tag == "Player")
             {  
-                 anim.SetBool ("isPouncing",true);
+                 anim.SetBool ("isAttacking",true);
                  Debug.Log(anim.GetBool("isPouncing"));
 
                 // ... the player is in range.
@@ -46,7 +46,7 @@ namespace CompleteProject
             // If the exiting collider is the player...
             if(other.tag == "Player")
             {
-                     anim.SetBool ("isPouncing",false);
+                     anim.SetBool ("isAttacking",false);
                 // ... the player is no longer in range.
                 playerInRange = false;
             }
