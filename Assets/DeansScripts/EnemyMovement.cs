@@ -9,7 +9,8 @@ namespace CompleteProject
         Transform player;               // Reference to the player's position.
       HealthScript playerHealth;      // Reference to the player's health.
         HealthScript enemyHealth;        // Reference to this enemy's health.
-        UnityEngine.AI.NavMeshAgent nav;               // Reference to the nav mesh agent.
+        UnityEngine.AI.NavMeshAgent nav;  
+        Animator anim;             // Reference to the nav mesh agent.
 
 
         void Awake ()
@@ -19,11 +20,15 @@ namespace CompleteProject
            playerHealth = player.GetComponent <HealthScript> ();
             enemyHealth = GetComponent <HealthScript> ();
             nav = GetComponent <UnityEngine.AI.NavMeshAgent> ();
+             anim = GetComponent <Animator> ();
         }
 
 
         void Update ()
         {
+            anim.SetFloat("crawlSpeed",nav.speed);
+            Debug.Log(nav.speed);
+
           //  If the enemy and the player have health left...
             if(enemyHealth.m_currentHP > 0 && playerHealth.m_currentHP > 0)
           {
