@@ -12,7 +12,6 @@ public class HealthScript : MonoBehaviour
     Animator anima;
 
     public Image m_healthBar;
-    public float damage;
     public float m_currentHP;                           // Reference to the UI's health bar.
     public Image damageImage;                                   // Reference to an image to flash on the screen on being hurt.
     public AudioClip deathClip;                                 // The audio clip to play when the player dies.
@@ -32,7 +31,7 @@ public class HealthScript : MonoBehaviour
 
         anima = GetComponent<Animator>();
         m_currentHP = m_maxHP;
-        Debug.Log(m_currentHP);
+        //Debug.Log(m_currentHP);
     }
 
     // Update is called once per frame
@@ -87,7 +86,7 @@ public class HealthScript : MonoBehaviour
                 damaged = true;
                 UpdateHealthBar();
             }
-            //            Debug.Log(m_currentHP);
+            Debug.Log(m_currentHP);
 
             if (m_currentHP <= 0)
             {

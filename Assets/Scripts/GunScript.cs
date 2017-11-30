@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GunScript : MonoBehaviour
 {
-
+    public float m_damage = 1.0f;
     public int m_maxRounds = 30;
     public float m_RoF = 10.0f;
 
@@ -48,7 +48,9 @@ public class GunScript : MonoBehaviour
                 
 				b.GetComponent<Rigidbody>().velocity = dir;
                 b.transform.rotation = Quaternion.LookRotation(dir);
-                Debug.Log(b);
+
+                b.GetComponent<BulletScript>().SetDamage(m_damage);
+                //Debug.Log(b);
             }
 
         }

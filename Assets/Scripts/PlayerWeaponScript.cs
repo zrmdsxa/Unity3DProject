@@ -28,7 +28,7 @@ public class PlayerWeaponScript : MonoBehaviour
         {
             if (Input.GetAxis("Attack") != 0)
             {
-                Debug.Log("PlayerWeaponScript:Fire");
+                //Debug.Log("PlayerWeaponScript:Fire");
                 m_GunScript.fire();
             }
 
