@@ -21,7 +21,6 @@ public class EnemySpawnerScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		//Debug.Log(Random.Range(0,m_spawns.Length));
 
 		if (m_currentSpawnDelay > 0.0f){
 			m_currentSpawnDelay -= Time.deltaTime;

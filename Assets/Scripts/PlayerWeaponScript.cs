@@ -36,6 +36,7 @@ public class PlayerWeaponScript : MonoBehaviour
         }
     }
 
+    
 
     //warn: will pick up all weapons within range
     void OnTriggerStay(Collider other)

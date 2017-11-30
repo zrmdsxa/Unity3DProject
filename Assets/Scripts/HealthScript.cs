@@ -18,7 +18,7 @@ public class HealthScript : MonoBehaviour
     public AudioClip deathClip;                                 // The audio clip to play when the player dies.
     public float flashSpeed = 5f;                               // The speed the damageImage will fade at.
     public Color flashColour = new Color(1f, 0f, 0f, 0.1f);     // The colour the damageImage is set to, to flash.
-PlayerMovement playerMovement;                              // Reference to the player's movement.
+    PlayerMovement playerMovement;                              // Reference to the player's movement.
     GunScript playerShooting;                              // Reference to the PlayerShooting script.
     bool isDead;                                                // Whether the player is dead.
     bool damaged;                                               // True when the player gets damaged.
@@ -26,9 +26,9 @@ PlayerMovement playerMovement;                              // Reference to the 
     // Use this for initialization
     void Start()
     {
-             //   playerAudio = GetComponent <AudioSource> ();
-        playerMovement = GetComponent <PlayerMovement> ();
-        playerShooting = GetComponentInChildren <GunScript> ();
+        //   playerAudio = GetComponent <AudioSource> ();
+        playerMovement = GetComponent<PlayerMovement>();
+        playerShooting = GetComponentInChildren<GunScript>();
 
         anima = GetComponent<Animator>();
         m_currentHP = m_maxHP;
@@ -36,9 +36,11 @@ PlayerMovement playerMovement;                              // Reference to the 
     }
 
     // Update is called once per frame
-    void Update(){
-    if(m_isPlayer){
-          if(damaged)
+    void Update()
+    {
+        if (m_isPlayer)
+        {
+            if (damaged)
             {
                 // ... set the colour of the damageImage to the flash colour.
                 damageImage.color = flashColour;
@@ -47,17 +49,17 @@ PlayerMovement playerMovement;                              // Reference to the 
             else
             {
                 // ... transition the colour back to clear.
-                damageImage.color = Color.Lerp (damageImage.color, Color.clear, flashSpeed * Time.deltaTime);
+                damageImage.color = Color.Lerp(damageImage.color, new Color(1, 1, 1, 0), flashSpeed * Time.deltaTime);
             }
 
-        
-    }
-        
-            // If the player has just been damaged...
-          
-            // Reset the damaged flag.
-            damaged = false;
-        
+
+        }
+
+        // If the player has just been damaged...
+
+        // Reset the damaged flag.
+        damaged = false;
+
         // if (!m_isPlayer )
         // {
         //      if (Input.GetKeyDown(KeyCode.K))
@@ -80,18 +82,19 @@ PlayerMovement playerMovement;                              // Reference to the 
         if (m_currentHP > 0)
         {
             m_currentHP -= damage;
-            if(m_isPlayer){
-damaged = true;
-UpdateHealthBar();
+            if (m_isPlayer)
+            {
+                damaged = true;
+                UpdateHealthBar();
             }
-//            Debug.Log(m_currentHP);
-            
+            //            Debug.Log(m_currentHP);
+
             if (m_currentHP <= 0)
             {
                 if (m_isPlayer)
                 {
                     PlayerDie();
-                    
+
                 }
                 else
                 {
@@ -118,15 +121,20 @@ UpdateHealthBar();
 
     void PlayerDie()
     {
-        Debug.Log("playertdie");
+        Debug.Log("player die");
         anima.SetBool("isDead", true);
-        //GetComponent<NavMeshAgent>().enabled=false;
-       // Destroy(gameObject, 3f);
+
+        GetComponent<PlayerCameraScript>().enabled = false;
+        GetComponent<PlayerMovementScript>().enabled = false;
+        GetComponent<PlayerWeaponScript>().enabled = false;
+        GameManager.instance.GameOver();
     }
     void EnemyDie()
-    {Debug.Log("enemydie");
+    {
+        Debug.Log("enemydie");
         anima.SetBool("isDead", true);
-        GetComponent<NavMeshAgent>().enabled=false;
+        GetComponent<NavMeshAgent>().enabled = false;
         Destroy(gameObject, 3f);
     }
+
 }

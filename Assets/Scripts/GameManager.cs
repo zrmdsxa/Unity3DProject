@@ -125,6 +125,6 @@ public class GameManager : MonoBehaviour
 
     public void GameOver(){
         ChangeGameState(GameState.Lose);
-        GetComponent<PlayerMovementScript>().PlayerDied();
+        
     }
 }
