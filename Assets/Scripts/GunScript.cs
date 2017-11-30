@@ -4,9 +4,15 @@ using UnityEngine;
 
 public class GunScript : MonoBehaviour
 {
+    
+
+    //0 = 5.56mm
+    //1 = 9mm
+    public int m_ammoType = 0;
     public float m_damage = 1.0f;
     public int m_maxRounds = 30;
     public float m_RoF = 10.0f;
+    public float m_reloadTime = 3.0f;
 
     public float m_deviation = 0.0f;
 
@@ -22,6 +28,7 @@ public class GunScript : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        
         m_remainingShots = m_maxRounds;
     }
 
@@ -38,7 +45,7 @@ public class GunScript : MonoBehaviour
         {
             if (m_coolDown <= 0.0f)
             {
-                Debug.Log("GunScript:Fire");
+                //Debug.Log("GunScript:Fire");
                 m_coolDown = 1.0f / m_RoF;
 				m_remainingShots--;
                 
@@ -55,5 +62,13 @@ public class GunScript : MonoBehaviour
 
         }
 
+    }
+
+    public int GetRemainingBullets(){
+        return m_remainingShots;
+    }
+
+    public void Reload(int bullets){
+        m_remainingShots = bullets;
     }
 }

@@ -12,16 +12,12 @@ public class BulletScript : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-		
-	}
-
 	public void SetDamage(float damage){
 		m_damage = damage;
 	}
 
 	public void OnCollisionEnter(Collision other){
-		Debug.Log(other.gameObject);
+		//Debug.Log(other.gameObject);
 		if (other.gameObject.tag == "Enemy"){
 			other.gameObject.GetComponent<HealthScript>().TakeDamage(m_damage);
 			DestroyBullet(Vector3.zero);

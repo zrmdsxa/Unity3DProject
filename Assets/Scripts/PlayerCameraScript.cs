@@ -9,12 +9,14 @@ public class PlayerCameraScript : MonoBehaviour {
 
 	public Transform m_hand;
 
+	public Transform m_cameraPivot;
+
 	//these must be public for access to sync with weapon
 	public float m_xDeg = 0.0f;
 	public float m_yDeg = 0.0f;
 
-	float m_yMinLimit = -60.0f;
-	float m_yMaxLimit = 70.0f;
+	float m_yMinLimit = -35.0f;
+	float m_yMaxLimit = 60.0f;
 
 
 	void Start () {
@@ -24,6 +26,10 @@ public class PlayerCameraScript : MonoBehaviour {
 	}
 	
 	void LateUpdate () {
+		if (Input.GetKeyDown(KeyCode.P)){
+			Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
 
 		m_xDeg += Input.GetAxis("Mouse X") * m_xSpeed * Time.deltaTime;
 		m_yDeg -= Input.GetAxis("Mouse Y") * m_ySpeed * Time.deltaTime;
@@ -45,6 +51,8 @@ public class PlayerCameraScript : MonoBehaviour {
 		m_yDeg = ClampAngle(m_yDeg,m_yMinLimit,m_yMaxLimit);
 
 		m_hand.rotation = rotation2;
+
+		m_cameraPivot.rotation = rotation2;
 
 		//Debug.Log(m_hand.rotation.eulerAngles.x);
 

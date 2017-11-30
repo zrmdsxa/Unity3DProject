@@ -12,6 +12,7 @@ public class HealthScript : MonoBehaviour
     Animator anima;
 
     public Image m_healthBar;
+    public Text m_healthText;
     public float m_currentHP;                           // Reference to the UI's health bar.
     public Image damageImage;                                   // Reference to an image to flash on the screen on being hurt.
     public AudioClip deathClip;                                 // The audio clip to play when the player dies.
@@ -31,6 +32,7 @@ public class HealthScript : MonoBehaviour
 
         anima = GetComponent<Animator>();
         m_currentHP = m_maxHP;
+        UpdateHealthBar();
         //Debug.Log(m_currentHP);
     }
 
@@ -73,46 +75,53 @@ public class HealthScript : MonoBehaviour
         if (m_isPlayer)
         {
             m_healthBar.fillAmount = m_currentHP / m_maxHP;
+            m_healthText.text = "HP:" + m_currentHP.ToString("0");
         }
     }
 
     public void TakeDamage(float damage)
     {
-        if (m_currentHP > 0)
+        if (damage > 0)
         {
-            m_currentHP -= damage;
-            if (m_isPlayer)
+            if (m_currentHP > 0)
             {
-                damaged = true;
-                UpdateHealthBar();
-            }
-            Debug.Log(m_currentHP);
-
-            if (m_currentHP <= 0)
-            {
+                m_currentHP -= damage;
                 if (m_isPlayer)
                 {
-                    PlayerDie();
+                    damaged = true;
+                    UpdateHealthBar();
 
                 }
-                else
+                Debug.Log(m_currentHP);
+
+                if (m_currentHP <= 0)
                 {
-                    EnemyDie();
+                    m_currentHP = 0;
+                    if (m_isPlayer)
+                    {
+                        UpdateHealthBar();
+                        PlayerDie();
+
+                    }
+                    else
+                    {
+                        EnemyDie();
+                    }
                 }
-            }
-            else if (m_isPlayer)
-            {
-                if (m_currentHP >= 75.0f)
+                else if (m_isPlayer)
                 {
-                    m_healthBar.color = Color.green;
-                }
-                else if (m_currentHP <= 25.0f)
-                {
-                    m_healthBar.color = Color.red;
-                }
-                else
-                {
-                    m_healthBar.color = Color.yellow;
+                    if (m_currentHP >= 75.0f)
+                    {
+                        m_healthBar.color = Color.green;
+                    }
+                    else if (m_currentHP <= 25.0f)
+                    {
+                        m_healthBar.color = Color.red;
+                    }
+                    else
+                    {
+                        m_healthBar.color = Color.yellow;
+                    }
                 }
             }
         }
