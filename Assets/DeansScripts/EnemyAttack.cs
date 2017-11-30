@@ -39,7 +39,7 @@ using System.Collections;
 //                 Debug.Log(anim.GetBool("isPouncing"));
 
                 // ... the player is in range.
-                playerInRange = true;
+                //playerInRange = true;
             }
         }
 
@@ -51,7 +51,7 @@ using System.Collections;
             {
                      anim.SetBool ("isAttacking",false);
                 // ... the player is no longer in range.
-                playerInRange = false;
+                //playerInRange = false;
             }
         }
 

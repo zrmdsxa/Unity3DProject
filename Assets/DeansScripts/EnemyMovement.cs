@@ -27,7 +27,7 @@ namespace CompleteProject
         void Update ()
         {
             
-            if(gameObject.name == "Crawler (Clone)"){
+            if(gameObject.name == "Crawler(Clone)"){
             anim.SetFloat("crawlSpeed",nav.speed);
 //            Debug.Log(nav.speed);
             }
