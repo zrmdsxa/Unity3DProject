@@ -84,7 +84,7 @@ PlayerMovement playerMovement;                              // Reference to the 
 damaged = true;
 UpdateHealthBar();
             }
-            Debug.Log(m_currentHP);
+//            Debug.Log(m_currentHP);
             
             if (m_currentHP <= 0)
             {
