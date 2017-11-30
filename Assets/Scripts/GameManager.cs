@@ -81,7 +81,7 @@ public class GameManager : MonoBehaviour
     {
         if (m_introTimer <= 0.0f)
         {
-            Debug.Log("Change to MENU");
+          //  Debug.Log("Change to MENU");
             ChangeGameState(GameState.Menu);
         }
         else
@@ -114,16 +114,17 @@ public class GameManager : MonoBehaviour
 	}
 
 	public void ChangeCharacter(){
-		Debug.Log("Menu changed char");
+		//Debug.Log("Menu changed char");
 		m_playerSelected = m_dropdownCharacter.value;
 	}
 
     public void ChangeLevel(){
-        Debug.Log("Menu changed level");
+       // Debug.Log("Menu changed level");
 		m_levelSelected = m_dropdownLevel.value+1;
     }
 
     public void GameOver(){
+        Debug.Log("return mainmenu");
         ChangeGameState(GameState.Lose);
         
     }
