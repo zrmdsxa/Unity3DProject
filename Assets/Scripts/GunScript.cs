@@ -21,6 +21,7 @@ public class GunScript : MonoBehaviour
 	public GameObject m_bullet;
 
 	public float m_bulletSpeed = 100.0f;
+    public GameObject m_muzzleflashPrefab;
 
     public GameObject m_soundPrefab;
     public GameObject m_reloadPrefab;
@@ -41,9 +42,9 @@ public class GunScript : MonoBehaviour
 		m_coolDown -= Time.deltaTime;
     }
 
-    public void fire()
+    public bool Fire()
     {
-
+        bool fired = false;
         if (m_remainingShots > 0)
         {
             if (m_coolDown <= 0.0f)
@@ -62,12 +63,13 @@ public class GunScript : MonoBehaviour
                 b.GetComponent<BulletScript>().SetDamage(m_damage);
 
                 Destroy(Instantiate(m_soundPrefab,transform.position,Quaternion.identity),1.0f);
-
+                Destroy(Instantiate(m_muzzleflashPrefab,m_bulletSpawn.position,Quaternion.identity),0.9f);
+                fired = true;
                 //Debug.Log(b);
             }
 
         }
-
+        return fired;
     }
 
     public int GetRemainingBullets(){

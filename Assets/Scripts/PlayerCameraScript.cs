@@ -11,17 +11,25 @@ public class PlayerCameraScript : MonoBehaviour {
 
 	public Transform m_cameraPivot;
 
+	public Transform m_crosshair;
+
 	//these must be public for access to sync with weapon
 	public float m_xDeg = 0.0f;
 	public float m_yDeg = 0.0f;
 
+
+
 	float m_yMinLimit = -35.0f;
 	float m_yMaxLimit = 60.0f;
+
+	bool m_zoomed = false;
+	Camera[] cameras;
 
 
 	void Start () {
 		Vector3 angles = transform.eulerAngles;
         m_xDeg = angles.x;
+		cameras = m_cameraPivot.GetComponentsInChildren<Camera>();
         //m_yDeg = angles.y;
 	}
 	
@@ -30,7 +38,23 @@ public class PlayerCameraScript : MonoBehaviour {
 
 		m_xDeg += Input.GetAxis("Mouse X") * m_xSpeed * Time.deltaTime;
 		m_yDeg -= Input.GetAxis("Mouse Y") * m_ySpeed * Time.deltaTime;
+		
 
+		if(Input.GetButtonDown("Zoom")){
+			//default zoom 60
+			if(m_zoomed){
+				m_zoomed = false;
+				cameras[0].fieldOfView =60;
+				cameras[1].fieldOfView =60;
+				m_crosshair.localPosition = new Vector3(0,0,20);
+			}
+			else{
+				m_zoomed = true;
+				cameras[0].fieldOfView =20;
+				cameras[1].fieldOfView =20;
+				m_crosshair.localPosition = new Vector3(0,0,40);
+			}
+		}
 
 		RotateCamera();
 	}
@@ -66,4 +90,9 @@ public class PlayerCameraScript : MonoBehaviour {
 		}
         return Mathf.Clamp(angle,min,max);
     }
+
+	public void AddRecoil(){
+		m_xDeg += Random.Range(-0.5f,0.5f);
+		m_yDeg -= Random.Range(0.1f,0.5f);
+	}
 }

@@ -8,11 +8,11 @@ public class GrenadeScript : MonoBehaviour
     public float m_fuse = 4.0f;
     public float m_damage = 50.0f;
 
-	public GameObject m_explosionPrefab;
+	public GameObject m_explosionPrefab;    //explosion particle system
 
-    public GameObject m_soundPrefab;
+    public GameObject m_soundPrefab;       //explosion sound
 
-    float m_range = 3.0f; //set max range+0.1
+    float m_range = 3.0f; //set as same value as collider radius
 
     List<GameObject> m_thingsInRange;
     // Use this for initialization

@@ -27,6 +27,8 @@ public class PlayerWeaponScript : MonoBehaviour
     private PlayerCameraScript m_PCS_script;
     private GunScript m_GunScript;
 
+    private Animator m_animationController;
+
     //0 = 5.56mm
     //1 = 9mm
     //2 = grenade
@@ -37,6 +39,7 @@ public class PlayerWeaponScript : MonoBehaviour
     void Start()
     {
         m_PCS_script = GetComponent<PlayerCameraScript>();
+        m_animationController = GetComponent<Animator>();
         m_storedAmmo[0] = 0;
         m_storedAmmo[1] = 0;
         m_storedAmmo[2] = 0;
@@ -54,7 +57,9 @@ public class PlayerWeaponScript : MonoBehaviour
             if (Input.GetAxis("Attack") != 0)
             {
                 //Debug.Log("PlayerWeaponScript:Fire");
-                m_GunScript.fire();
+                if (m_GunScript.Fire()){
+                    m_PCS_script.AddRecoil();
+                }
             }
             if (Input.GetButtonDown("Reload"))
             {
@@ -64,6 +69,7 @@ public class PlayerWeaponScript : MonoBehaviour
                     if (m_storedAmmo[m_GunScript.m_ammoType] > 0)
                     {
                         m_reloading = true;
+                        m_animationController.SetBool("isReloading",true);
                         m_reloadTime = m_GunScript.StartReload();
                         m_currentReloadTime = 0.0f;
                         m_storedAmmo[m_GunScript.m_ammoType] += m_GunScript.GetRemainingBullets();
@@ -82,6 +88,7 @@ public class PlayerWeaponScript : MonoBehaviour
             else if (m_currentReloadTime >= m_reloadTime)
             {
                 m_reloading = false;
+                m_animationController.SetBool("isReloading",false);
                 //Debug.Log("reloaded:" + Mathf.Clamp(m_GunScript.m_maxRounds, 1, m_storedAmmo[m_GunScript.m_ammoType]) + " bullets");
                 m_GunScript.ReloadBullets(Mathf.Clamp(m_GunScript.m_maxRounds, 1, m_storedAmmo[m_GunScript.m_ammoType]));
                 m_storedAmmo[m_GunScript.m_ammoType] -= Mathf.Clamp(m_GunScript.m_maxRounds, 1, m_storedAmmo[m_GunScript.m_ammoType]);
