@@ -4,15 +4,18 @@ using UnityEngine.UI;
 public class RADAR1 : MonoBehaviour{
   public float insideRadarDistance = 20;
   public float blipSizePercentage = 5;
-  public GameObject rawImageBlipParasite;
+  public GameObject rawImageBlipAmmo;
   public GameObject rawImageBlipMutant;
   public GameObject rawImageBlipCrawler;
+ 
+
   private RawImage rawImageRadarBackground;
   private Transform playerTransform;
   private float radarWidth;
   private float radarHeight;
   private float blipHeight;
   private float blipWidth;
+  public GameObject radarSound;
   void Start (){
     playerTransform =  
 GameObject.FindGameObjectWithTag("Player").transform;
@@ -23,12 +26,14 @@ rawImageRadarBackground.rectTransform.rect.width;
 rawImageRadarBackground.rectTransform.rect.height;
     blipHeight = radarHeight * blipSizePercentage/100;
     blipWidth = radarWidth * blipSizePercentage/100;
+    Instantiate(radarSound,transform.position, Quaternion.identity);
   }
   void Update (){
     RemoveAllBlips();
     FindAndDisplayBlipsForTag("Enemy", rawImageBlipMutant);
     FindAndDisplayBlipsForTag("Enemy", rawImageBlipCrawler);
-    FindAndDisplayBlipsForTag("Enemy", rawImageBlipParasite);
+    FindAndDisplayBlipsForTag("Ammo", rawImageBlipAmmo);
+    
   }
   private void FindAndDisplayBlipsForTag(string tag,  
 GameObject prefabBlip){
