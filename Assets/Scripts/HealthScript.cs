@@ -109,8 +109,8 @@ public class HealthScript : MonoBehaviour
                 else if (m_isPlayer)
                 {
                     damaged = true;
-                Destroy( Instantiate(hurtSound, transform.position, Quaternion.identity),5f);
                     UpdateHealthBar();
+                    Destroy( Instantiate(hurtSound, transform.position, Quaternion.identity),5f);
                     if (m_currentHP >= 75.0f)
                     {
                         m_healthBar.color = Color.green;
@@ -128,7 +128,7 @@ public class HealthScript : MonoBehaviour
         }
     }
 
-    void PlayerDie()
+    public void PlayerDie()
     {
         Debug.Log("player die");
         anima.SetBool("isDead", true);
@@ -144,7 +144,8 @@ public class HealthScript : MonoBehaviour
         Debug.Log("enemydie");
         anima.SetBool("isDead", true);
         GetComponent<NavMeshAgent>().enabled = false;
-         Destroy( Instantiate(enemydeath, transform.position, Quaternion.identity),5f);
+        EnemySpawnerScript.instance.EnemyDied();
+        Destroy( Instantiate(enemydeath, transform.position, Quaternion.identity),5f);
         Destroy(gameObject, 3f);
     }
 

@@ -34,8 +34,19 @@ namespace CompleteProject
           //  If the enemy and the player have health left...
             if(enemyHealth.m_currentHP > 0 && playerHealth.m_currentHP > 0)
           {
-                // ... set the destination of the nav mesh agent to the player.
+              if ((player.position - transform.position).magnitude < 1.0f ){
+                  Debug.Log("stop");
+                  //nav.speed = 0.1f;
+                  //nav.isStopped = true;
+                  //nav.enabled = false;
+                  
+              }else{
+                  // ... set the destination of the nav mesh agent to the player.
                 nav.SetDestination (player.position);
+                //nav.speed = 
+                //nav.enabled = true;
+              }
+                
             }
             // Otherwise...
            else

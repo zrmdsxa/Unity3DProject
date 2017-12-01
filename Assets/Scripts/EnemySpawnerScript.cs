@@ -1,46 +1,85 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class EnemySpawnerScript : MonoBehaviour {
+public class EnemySpawnerScript : MonoBehaviour
+{
+	public static EnemySpawnerScript instance;
+    public GameObject[] m_enemies;
+    public Transform[] m_spawns;
 
-	public GameObject[] m_enemies;
-	public Transform[] m_spawns;
+    public int m_numEnemiesToSpawn = 20;
+    public int m_maxEnemies = 10;
 
-	public int m_maxEnemies = 10;
+    public float m_spawnDelay = 10.0f;
 
-	public float m_spawnDelay = 10.0f;
+	public Text m_enemiesText;
 
-	int m_currentNumEnemies = 0;
-	float m_currentSpawnDelay = 10.0f;
+    int m_currentNumEnemies = 0;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
+    int m_enemiesLeft;
 	
-	// Update is called once per frame
-	void Update () {
+    float m_currentSpawnDelay = 10.0f;
 
-		if (m_currentSpawnDelay > 0.0f){
-			m_currentSpawnDelay -= Time.deltaTime;
-		}
-		else if( m_currentSpawnDelay <= 0.0f){
-			if (m_currentNumEnemies < m_maxEnemies){
-				SpawnEnemy();
-			}
-			
-		}
+    // Use this for initialization
+    void Start()
+    {
+		if (instance == null)
+        {
+            instance = this;
+            //DontDestroyOnLoad(gameObject);
+        }
+        else if (instance != this)
+        {
+            Destroy(gameObject);
+        }
+        m_enemiesLeft = m_numEnemiesToSpawn;
+		UpdateText();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (m_enemiesLeft > 0)
+        {
+
+            if (m_currentSpawnDelay > 0.0f)
+            {
+                m_currentSpawnDelay -= Time.deltaTime;
+            }
+            else if (m_currentSpawnDelay <= 0.0f)
+            {
+                if (m_currentNumEnemies < m_maxEnemies)
+                {
+                    SpawnEnemy();
+                }
+
+            }
+        }
+
+    }
+
+    void SpawnEnemy()
+    {
+        m_currentSpawnDelay = m_spawnDelay;
+        GameObject enemy = Instantiate(m_enemies[Random.Range(0, m_enemies.Length)], m_spawns[Random.Range(0, m_spawns.Length)].position, Quaternion.identity);
+        m_currentNumEnemies++;
 		
-	}
+    }
 
-	void SpawnEnemy(){
-		m_currentSpawnDelay = m_spawnDelay;
-		GameObject enemy = Instantiate(m_enemies[Random.Range(0,m_enemies.Length)],m_spawns[Random.Range(0,m_spawns.Length)].position,Quaternion.identity);
-		m_currentNumEnemies++;
-	}
+    public void EnemyDied()
+    {
+        m_currentNumEnemies--;
+		Debug.Log("current:"+m_currentNumEnemies+" left:"+m_enemiesLeft);
+		if(m_enemiesLeft <= 0 && m_currentNumEnemies <= 0){
+			GameManager.instance.GameWin();
+		}
+		m_enemiesLeft--;
+		UpdateText();
+    }
 
-	public void EnemyDied(){
-		m_currentNumEnemies--;
+	void UpdateText(){
+		m_enemiesText.text = "Enemies\n"+m_enemiesLeft;
 	}
 }

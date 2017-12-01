@@ -19,9 +19,6 @@ public class GameManager : MonoBehaviour
 	public float m_gameLength = 301.0f;
 
 	public GameObject[] m_playerCharacters;
-
-	
-
 	public Dropdown m_dropdownCharacter;
     public Dropdown m_dropdownLevel;
 	
@@ -35,6 +32,8 @@ public class GameManager : MonoBehaviour
     public int m_playerSelected = 0;//must be public for spawning
 
     int m_levelSelected = 1;
+
+    GameObject m_currentPlayer = null;
 	
 
     void Awake()
@@ -73,6 +72,7 @@ public class GameManager : MonoBehaviour
             case GameState.Win:
                 break;
             case GameState.Lose:
+                
                 break;
         }
     }
@@ -95,6 +95,8 @@ public class GameManager : MonoBehaviour
 			m_gameTimer -= Time.deltaTime;
 			if (m_gameTimer < 0){
 				m_gameTimer = 0;
+                GameObject.FindGameObjectWithTag("Player").GetComponent<HealthScript>().PlayerDie();
+                ChangeGameState(GameState.Lose);
 			}
 			m_gameTimerText.text = Mathf.Floor((m_gameTimer/60)).ToString("0")+":"+Mathf.Floor((m_gameTimer%60)).ToString("00");
 		}
@@ -108,8 +110,8 @@ public class GameManager : MonoBehaviour
 	}
 
 	public void MenuButtonPlay(){
+        ChangeGameState(GameState.Play);
 		SceneManager.LoadScene(m_levelSelected);
-		ChangeGameState(GameState.Play);
 		m_gameTimer = m_gameLength;
 	}
 
@@ -124,8 +126,30 @@ public class GameManager : MonoBehaviour
     }
 
     public void GameOver(){
-        Debug.Log("return mainmenu");
-        ChangeGameState(GameState.Lose);
+        Debug.Log(m_currentState);
+        if (m_currentState == GameState.Play){
+            Debug.Log("Game Over");
+            ChangeGameState(GameState.Lose);
+        }
         
+    }
+
+    public void GameWin(){
+        Debug.Log(m_currentState);
+        if (m_currentState == GameState.Play){
+            Debug.Log("Win");
+            ChangeGameState(GameState.Win);
+        }
+        
+    }
+
+    public void MainMenuButton(){
+        ChangeGameState(GameState.Menu);
+        SceneManager.LoadScene(0);
+        
+    }
+
+    public void SetPlayer(GameObject player){
+        m_currentPlayer = player;
     }
 }
