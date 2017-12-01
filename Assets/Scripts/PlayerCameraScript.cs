@@ -26,10 +26,7 @@ public class PlayerCameraScript : MonoBehaviour {
 	}
 	
 	void LateUpdate () {
-		if (Input.GetKeyDown(KeyCode.P)){
-			Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
+		
 
 		m_xDeg += Input.GetAxis("Mouse X") * m_xSpeed * Time.deltaTime;
 		m_yDeg -= Input.GetAxis("Mouse Y") * m_ySpeed * Time.deltaTime;

@@ -22,6 +22,9 @@ public class GunScript : MonoBehaviour
 
 	public float m_bulletSpeed = 100.0f;
 
+    public GameObject m_soundPrefab;
+    public GameObject m_reloadPrefab;
+
     int m_remainingShots = 0;
     float m_coolDown = 0.0f;
 
@@ -57,6 +60,9 @@ public class GunScript : MonoBehaviour
                 b.transform.rotation = Quaternion.LookRotation(dir);
 
                 b.GetComponent<BulletScript>().SetDamage(m_damage);
+
+                Destroy(Instantiate(m_soundPrefab,transform.position,Quaternion.identity),1.0f);
+
                 //Debug.Log(b);
             }
 
@@ -68,7 +74,12 @@ public class GunScript : MonoBehaviour
         return m_remainingShots;
     }
 
-    public void Reload(int bullets){
+    public void ReloadBullets(int bullets){
         m_remainingShots = bullets;
+    }
+
+    public float StartReload(){
+        Destroy(Instantiate(m_reloadPrefab,transform.position,Quaternion.identity),m_reloadTime);
+        return m_reloadTime;
     }
 }

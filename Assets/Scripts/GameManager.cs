@@ -34,6 +34,8 @@ public class GameManager : MonoBehaviour
     int m_levelSelected = 1;
 
     GameObject m_currentPlayer = null;
+
+    bool m_paused = false;
 	
 
     void Awake()
@@ -62,19 +64,24 @@ public class GameManager : MonoBehaviour
         switch (m_currentState)
         {
             case GameState.Intro:
+                
                 UpdateIntro();
                 break;
             case GameState.Menu:
+                UnlockMouse();
                 break;
             case GameState.Play:
 				UpdatePlay();
                 break;
             case GameState.Win:
+                UnlockMouse();
                 break;
             case GameState.Lose:
-                
+                UnlockMouse();
                 break;
         }
+        
+
     }
 
     void UpdateIntro()
@@ -100,7 +107,21 @@ public class GameManager : MonoBehaviour
 			}
 			m_gameTimerText.text = Mathf.Floor((m_gameTimer/60)).ToString("0")+":"+Mathf.Floor((m_gameTimer%60)).ToString("00");
 		}
-		
+        if (Input.GetKeyDown(KeyCode.Escape)){
+            Debug.Log("escape");
+            Debug.Log(m_paused);
+            if (m_paused){
+                Debug.Log("timescale 1");
+                Time.timeScale = 1.0f;
+                m_paused = false;
+            }
+            else{
+                Debug.Log("timescale 0");
+                Time.timeScale = 0.0f;
+                m_paused = true;
+            }
+        }
+       		
 	}
 
 	void ChangeGameState(GameState newState){
@@ -113,6 +134,7 @@ public class GameManager : MonoBehaviour
         ChangeGameState(GameState.Play);
 		SceneManager.LoadScene(m_levelSelected);
 		m_gameTimer = m_gameLength;
+        LockMouse();
 	}
 
 	public void ChangeCharacter(){
@@ -151,5 +173,17 @@ public class GameManager : MonoBehaviour
 
     public void SetPlayer(GameObject player){
         m_currentPlayer = player;
+    }
+
+    void LockMouse(){
+		Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        m_paused = false;
+    }
+
+    void UnlockMouse(){
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        m_paused = true;
     }
 }

@@ -134,7 +134,7 @@ public class HealthScript : MonoBehaviour
         anima.SetBool("isDead", true);
 
         GetComponent<PlayerCameraScript>().enabled = false;
-        GetComponent<PlayerMovementScript>().enabled = false;
+        GetComponent<PlayerMovementScript>().PlayerDied();
         GetComponent<PlayerWeaponScript>().enabled = false;
         Instantiate(dieSound, transform.position, Quaternion.identity);
         GameManager.instance.GameOver();

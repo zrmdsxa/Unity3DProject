@@ -18,6 +18,11 @@ public class PlayerWeaponScript : MonoBehaviour
 
     private GameObject m_closestWeapon = null;
 
+    private bool m_reloading = false;
+
+    private float m_reloadTime;
+    private float m_currentReloadTime;
+
     //need access to xdeg and ydeg tor global hand rotations
     private PlayerCameraScript m_PCS_script;
     private GunScript m_GunScript;
@@ -53,17 +58,34 @@ public class PlayerWeaponScript : MonoBehaviour
             }
             if (Input.GetButtonDown("Reload"))
             {
-                if (m_storedAmmo[m_GunScript.m_ammoType] > 0){
-                    m_storedAmmo[m_GunScript.m_ammoType] += m_GunScript.GetRemainingBullets();
-                    m_GunScript.Reload(0);
-                    Debug.Log("reloaded:"+Mathf.Clamp(m_GunScript.m_maxRounds,1,m_storedAmmo[m_GunScript.m_ammoType])+" bullets");
-                    m_GunScript.Reload(Mathf.Clamp(m_GunScript.m_maxRounds,1,m_storedAmmo[m_GunScript.m_ammoType]));
-                    m_storedAmmo[m_GunScript.m_ammoType] -= Mathf.Clamp(m_GunScript.m_maxRounds,1,m_storedAmmo[m_GunScript.m_ammoType]);
+
+                if (!m_reloading)
+                {
+                    if (m_storedAmmo[m_GunScript.m_ammoType] > 0)
+                    {
+                        m_reloading = true;
+                        m_reloadTime = m_GunScript.StartReload();
+                        m_currentReloadTime = 0.0f;
+                        m_storedAmmo[m_GunScript.m_ammoType] += m_GunScript.GetRemainingBullets();
+                        m_GunScript.ReloadBullets(0);
+                    }
                 }
-                
             }
 
-
+        }
+        if (m_reloading)
+        {
+            if (m_currentReloadTime < m_reloadTime)
+            {
+                m_currentReloadTime += Time.deltaTime;
+            }
+            else if (m_currentReloadTime >= m_reloadTime)
+            {
+                m_reloading = false;
+                //Debug.Log("reloaded:" + Mathf.Clamp(m_GunScript.m_maxRounds, 1, m_storedAmmo[m_GunScript.m_ammoType]) + " bullets");
+                m_GunScript.ReloadBullets(Mathf.Clamp(m_GunScript.m_maxRounds, 1, m_storedAmmo[m_GunScript.m_ammoType]));
+                m_storedAmmo[m_GunScript.m_ammoType] -= Mathf.Clamp(m_GunScript.m_maxRounds, 1, m_storedAmmo[m_GunScript.m_ammoType]);
+            }
         }
         //2 = grenade
         if (m_storedAmmo[2] > 0)
@@ -102,9 +124,9 @@ public class PlayerWeaponScript : MonoBehaviour
 
     void ThrowGrenade()
     {
-        m_storedAmmo[2] -=1;
-        GameObject grenade = Instantiate(m_grenadePrefab,m_rightHand.position + m_rightHand.forward * 0.5f,m_rightHand.rotation);
-        grenade.GetComponent<Rigidbody>().velocity = ((m_rightHand.forward * 7.0f) +(m_rightHand.up * 2.0f));
+        m_storedAmmo[2] -= 1;
+        GameObject grenade = Instantiate(m_grenadePrefab, m_rightHand.position + m_rightHand.forward * 0.5f, m_rightHand.rotation);
+        grenade.GetComponent<Rigidbody>().velocity = ((m_rightHand.forward * 7.0f) + (m_rightHand.up * 2.0f));
     }
 
     void UseKey()
@@ -119,10 +141,10 @@ public class PlayerWeaponScript : MonoBehaviour
                 {
                     m_storedAmmo[m_GunScript.m_ammoType] += m_GunScript.GetRemainingBullets();
                     Destroy(m_currentWeapon);
-                    Debug.Log("Destroyed weapon");
+                    //Debug.Log("Destroyed weapon");
                 }
 
-                Debug.Log("Picked up weapon");
+                //Debug.Log("Picked up weapon");
                 m_currentWeapon = m_closestWeapon.gameObject;
                 m_GunScript = m_currentWeapon.GetComponent<GunScript>();
                 Debug.Log(m_GunScript);
@@ -140,7 +162,7 @@ public class PlayerWeaponScript : MonoBehaviour
                 m_storedAmmo[1] += 20;
                 m_storedAmmo[2] += 1;
                 Destroy(m_closestWeapon);
-                Debug.Log("Picked up ammo");
+                //Debug.Log("Picked up ammo");
             }
 
             ClearClosestWeapon();
@@ -148,13 +170,16 @@ public class PlayerWeaponScript : MonoBehaviour
         }
     }
 
-    void UpdateText(){
-        if (m_GunScript != null){
-            m_ammoText.text = m_currentWeapon.name+": "+ m_GunScript.GetRemainingBullets().ToString("0")+" | "+ m_storedAmmo[m_GunScript.m_ammoType].ToString("0");
+    void UpdateText()
+    {
+        if (m_GunScript != null)
+        {
+            m_ammoText.text = m_currentWeapon.name + ": " + m_GunScript.GetRemainingBullets().ToString("0") + " | " + m_storedAmmo[m_GunScript.m_ammoType].ToString("0");
         }
-        else{
+        else
+        {
             m_ammoText.text = "";
         }
-        m_grenadeText.text = "G x "+m_storedAmmo[2].ToString("0");
+        m_grenadeText.text = "G x " + m_storedAmmo[2].ToString("0");
     }
 }

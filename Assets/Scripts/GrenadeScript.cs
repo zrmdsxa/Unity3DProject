@@ -10,6 +10,8 @@ public class GrenadeScript : MonoBehaviour
 
 	public GameObject m_explosionPrefab;
 
+    public GameObject m_soundPrefab;
+
     float m_range = 3.0f; //set max range+0.1
 
     List<GameObject> m_thingsInRange;
@@ -41,7 +43,7 @@ public class GrenadeScript : MonoBehaviour
     void OnDestroy()
     {
 		Destroy(Instantiate(m_explosionPrefab,transform.position,Quaternion.identity),3.0f);
-
+        Destroy(Instantiate(m_soundPrefab,transform.position,Quaternion.identity),3.0f);
         foreach (GameObject go in m_thingsInRange)
         {
             if (go != null)

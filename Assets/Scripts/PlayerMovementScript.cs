@@ -28,7 +28,8 @@ public class PlayerMovementScript : MonoBehaviour
 
     private bool m_isAlive = true;
     private bool m_mouseSideDown = false;
-    private CharacterController m_controller;
+    //private CharacterController m_controller;
+    private Rigidbody m_rb;
     private Animator m_animationController;
 
     private int m_attackState;
@@ -36,9 +37,9 @@ public class PlayerMovementScript : MonoBehaviour
     void Awake()
     {
         //get the controllers
-        m_controller = GetComponent<CharacterController>();
+        //m_controller = GetComponent<CharacterController>();
+        m_rb = GetComponent<Rigidbody>();
         m_animationController = GetComponent<Animator>();
-        m_attackState = Animator.StringToHash("UpperTorso.attack");
 
         //m_weaponHitBox.enabled = false;
     }
@@ -106,23 +107,21 @@ public class PlayerMovementScript : MonoBehaviour
             }//end if grounded
             else
             {
-
+                m_moveDirection.y -= m_gravity * Time.deltaTime;
             }
 
-            //Character must face the same direction as the camera when the right mouse button is down
-            // if(Input.GetMouseButton(1)){
-            // 	transform.rotation = Quaternion.Euler(0,Camera.main.transform.eulerAngles.y,0);
-            // }
-            // else{
-            // 	transform.Rotate(0,Input.GetAxis("Horizontal") * m_turnSpeed * Time.deltaTime,0);
-            // }
-            //apply gravity
-            m_moveDirection.y -= m_gravity * Time.deltaTime;
 
             //Debug.Log(m_moveDirection);
             //move character controller and check if grounded
-            m_grounded = ((m_controller.Move(m_moveDirection * Time.deltaTime)) & CollisionFlags.Below) != 0;
+            //m_grounded = ((m_controller.Move(m_moveDirection * Time.deltaTime)) & CollisionFlags.Below) != 0;
 
+            m_rb.velocity = m_moveDirection;
+
+
+            //transform.localPosition += m_moveDirection * Time.deltaTime;
+            
+            m_grounded = Physics.Raycast(transform.position,transform.up * -1f,0.1f,LayerMask.GetMask("Default","Shootable"));
+            //Debug.Log(m_grounded);
             //reset jumping after grounded
             m_jumping = m_grounded ? false : m_jumping;
             //Debug.Log(m_jumping);
@@ -135,11 +134,15 @@ public class PlayerMovementScript : MonoBehaviour
                 m_animationController.SetBool("Jump", false);
             }
 
+            //Debug.Log(m_rb.velocity);
+
         }
 
     }
 
 	public void PlayerDied(){
 		m_isAlive = false;
+        m_rb.velocity = Vector3.zero;
+        enabled = false;
 	}
 }
