@@ -35,9 +35,10 @@ public class PlayerCameraScript : MonoBehaviour {
 	
 	void LateUpdate () {
 		
+		float multiplier = m_zoomed ? 0.5f : 1f;
 
-		m_xDeg += Input.GetAxis("Mouse X") * m_xSpeed * Time.deltaTime;
-		m_yDeg -= Input.GetAxis("Mouse Y") * m_ySpeed * Time.deltaTime;
+		m_xDeg += Input.GetAxis("Mouse X") * m_xSpeed * Time.deltaTime * multiplier;
+		m_yDeg -= Input.GetAxis("Mouse Y") * m_ySpeed * Time.deltaTime * multiplier;
 		
 
 		if(Input.GetButtonDown("Zoom")){

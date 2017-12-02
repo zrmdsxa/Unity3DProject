@@ -48,61 +48,65 @@ public class PlayerWeaponScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButtonDown("Use"))
+        if (!GameManager.instance.GamePaused())
         {
-            UseKey();
-        }
-        if (m_hasWeapon)
-        {
-            if (Input.GetAxis("Attack") != 0)
+            if (Input.GetButtonDown("Use"))
             {
-                //Debug.Log("PlayerWeaponScript:Fire");
-                if (m_GunScript.Fire()){
-                    m_PCS_script.AddRecoil();
-                }
+                UseKey();
             }
-            if (Input.GetButtonDown("Reload"))
+            if (m_hasWeapon)
             {
-
-                if (!m_reloading)
+                if (Input.GetAxis("Attack") != 0)
                 {
-                    if (m_storedAmmo[m_GunScript.m_ammoType] > 0)
+                    //Debug.Log("PlayerWeaponScript:Fire");
+                    if (m_GunScript.Fire())
                     {
-                        m_reloading = true;
-                        m_animationController.SetBool("isReloading",true);
-                        m_reloadTime = m_GunScript.StartReload();
-                        m_currentReloadTime = 0.0f;
-                        m_storedAmmo[m_GunScript.m_ammoType] += m_GunScript.GetRemainingBullets();
-                        m_GunScript.ReloadBullets(0);
+                        m_PCS_script.AddRecoil();
                     }
                 }
-            }
+                if (Input.GetButtonDown("Reload"))
+                {
 
-        }
-        if (m_reloading)
-        {
-            if (m_currentReloadTime < m_reloadTime)
-            {
-                m_currentReloadTime += Time.deltaTime;
+                    if (!m_reloading)
+                    {
+                        if (m_storedAmmo[m_GunScript.m_ammoType] > 0 && m_GunScript.GetRemainingBullets() < m_GunScript.m_maxRounds)
+                        {
+                            m_reloading = true;
+                            m_animationController.SetBool("isReloading", true);
+                            m_reloadTime = m_GunScript.StartReload();
+                            m_currentReloadTime = 0.0f;
+                            m_storedAmmo[m_GunScript.m_ammoType] += m_GunScript.GetRemainingBullets();
+                            m_GunScript.ReloadBullets(0);
+                        }
+                    }
+                }
+
             }
-            else if (m_currentReloadTime >= m_reloadTime)
+            if (m_reloading)
             {
-                m_reloading = false;
-                m_animationController.SetBool("isReloading",false);
-                //Debug.Log("reloaded:" + Mathf.Clamp(m_GunScript.m_maxRounds, 1, m_storedAmmo[m_GunScript.m_ammoType]) + " bullets");
-                m_GunScript.ReloadBullets(Mathf.Clamp(m_GunScript.m_maxRounds, 1, m_storedAmmo[m_GunScript.m_ammoType]));
-                m_storedAmmo[m_GunScript.m_ammoType] -= Mathf.Clamp(m_GunScript.m_maxRounds, 1, m_storedAmmo[m_GunScript.m_ammoType]);
+                if (m_currentReloadTime < m_reloadTime)
+                {
+                    m_currentReloadTime += Time.deltaTime;
+                }
+                else if (m_currentReloadTime >= m_reloadTime)
+                {
+                    m_reloading = false;
+                    m_animationController.SetBool("isReloading", false);
+                    //Debug.Log("reloaded:" + Mathf.Clamp(m_GunScript.m_maxRounds, 1, m_storedAmmo[m_GunScript.m_ammoType]) + " bullets");
+                    m_GunScript.ReloadBullets(Mathf.Clamp(m_GunScript.m_maxRounds, 1, m_storedAmmo[m_GunScript.m_ammoType]));
+                    m_storedAmmo[m_GunScript.m_ammoType] -= Mathf.Clamp(m_GunScript.m_maxRounds, 1, m_storedAmmo[m_GunScript.m_ammoType]);
+                }
             }
-        }
-        //2 = grenade
-        if (m_storedAmmo[2] > 0)
-        {
-            if (Input.GetButtonDown("Grenade"))
+            //2 = grenade
+            if (m_storedAmmo[2] > 0)
             {
-                ThrowGrenade();
+                if (Input.GetButtonDown("Grenade"))
+                {
+                    ThrowGrenade();
+                }
             }
+            UpdateText();
         }
-        UpdateText();
     }
 
     void OnTriggerStay(Collider other)

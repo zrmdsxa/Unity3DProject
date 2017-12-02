@@ -166,9 +166,9 @@ public class GameManager : MonoBehaviour
     }
 
     public void MainMenuButton(){
-        ChangeGameState(GameState.Menu);
         SceneManager.LoadScene(0);
-        
+        ChangeGameState(GameState.Menu);
+    
     }
 
     public void SetPlayer(GameObject player){
@@ -185,5 +185,9 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         m_paused = true;
+    }
+
+    public bool GamePaused(){
+        return m_paused;
     }
 }

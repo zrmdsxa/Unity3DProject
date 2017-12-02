@@ -15,7 +15,7 @@ public class RADAR1 : MonoBehaviour{
   private float radarHeight;
   private float blipHeight;
   private float blipWidth;
-  public GameObject radarSound;
+
   void Start (){
     playerTransform =  
 GameObject.FindGameObjectWithTag("Player").transform;
@@ -26,7 +26,7 @@ rawImageRadarBackground.rectTransform.rect.width;
 rawImageRadarBackground.rectTransform.rect.height;
     blipHeight = radarHeight * blipSizePercentage/100;
     blipWidth = radarWidth * blipSizePercentage/100;
-    Instantiate(radarSound,transform.position, Quaternion.identity);
+
   }
   void Update (){
     RemoveAllBlips();

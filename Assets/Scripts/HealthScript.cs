@@ -15,12 +15,12 @@ public class HealthScript : MonoBehaviour
     public Text m_healthText;
     public float m_currentHP;                           // Reference to the UI's health bar.
     public Image damageImage;                                   // Reference to an image to flash on the screen on being hurt.
-                               // The audio clip to play when the player dies.
+                                                                // The audio clip to play when the player dies.
     public float flashSpeed = 5f;                               // The speed the damageImage will fade at.
     public Color flashColour = new Color(1f, 0f, 0f, 0.1f);     // The colour the damageImage is set to, to flash.
     PlayerMovement playerMovement;                              // Reference to the player's movement.
-    GunScript playerShooting;    
-    public GameObject dieSound; 
+    GunScript playerShooting;
+    public GameObject dieSound;
     public GameObject enemydeath;
     public GameObject hurtSound;                         // Reference to the PlayerShooting script.
     bool isDead;                                                // Whether the player is dead.
@@ -32,7 +32,7 @@ public class HealthScript : MonoBehaviour
         //   playerAudio = GetComponent <AudioSource> ();
         playerMovement = GetComponent<PlayerMovement>();
         playerShooting = GetComponentInChildren<GunScript>();
-       
+
 
         anima = GetComponent<Animator>();
         m_currentHP = m_maxHP;
@@ -85,43 +85,46 @@ public class HealthScript : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        if (damage > 0)
+        if (GameManager.instance.m_currentState == GameState.Play)
         {
-            if (m_currentHP > 0)
+            if (damage > 0)
             {
-                m_currentHP -= damage;
-                Debug.Log(m_currentHP);
-
-                if (m_currentHP <= 0)
+                if (m_currentHP > 0)
                 {
-                    m_currentHP = 0;
-                    if (m_isPlayer)
+                    m_currentHP -= damage;
+                    Debug.Log(m_currentHP);
+
+                    if (m_currentHP <= 0)
                     {
+                        m_currentHP = 0;
+                        if (m_isPlayer)
+                        {
+                            UpdateHealthBar();
+                            PlayerDie();
+
+                        }
+                        else
+                        {
+                            EnemyDie();
+                        }
+                    }
+                    else if (m_isPlayer)
+                    {
+                        damaged = true;
                         UpdateHealthBar();
-                        PlayerDie();
-
-                    }
-                    else
-                    {
-                        EnemyDie();
-                    }
-                }
-                else if (m_isPlayer)
-                {
-                    damaged = true;
-                    UpdateHealthBar();
-                    Destroy( Instantiate(hurtSound, transform.position, Quaternion.identity),5f);
-                    if (m_currentHP >= 75.0f)
-                    {
-                        m_healthBar.color = Color.green;
-                    }
-                    else if (m_currentHP <= 25.0f)
-                    {
-                        m_healthBar.color = Color.red;
-                    }
-                    else
-                    {
-                        m_healthBar.color = Color.yellow;
+                        Destroy(Instantiate(hurtSound, transform.position, Quaternion.identity), 5f);
+                        if (m_currentHP >= 75.0f)
+                        {
+                            m_healthBar.color = Color.green;
+                        }
+                        else if (m_currentHP <= 25.0f)
+                        {
+                            m_healthBar.color = Color.red;
+                        }
+                        else
+                        {
+                            m_healthBar.color = Color.yellow;
+                        }
                     }
                 }
             }
@@ -145,7 +148,7 @@ public class HealthScript : MonoBehaviour
         anima.SetBool("isDead", true);
         GetComponent<NavMeshAgent>().enabled = false;
         EnemySpawnerScript.instance.EnemyDied();
-        Destroy( Instantiate(enemydeath, transform.position, Quaternion.identity),5f);
+        Destroy(Instantiate(enemydeath, transform.position, Quaternion.identity), 5f);
         Destroy(gameObject, 3f);
     }
 

@@ -35,7 +35,7 @@ namespace CompleteProject
             if(enemyHealth.m_currentHP > 0 && playerHealth.m_currentHP > 0)
           {
               if ((player.position - transform.position).magnitude < 1.0f ){
-                  Debug.Log("stop");
+                  //Debug.Log("stop");
                   //nav.speed = 0.1f;
                   //nav.isStopped = true;
                   //nav.enabled = false;

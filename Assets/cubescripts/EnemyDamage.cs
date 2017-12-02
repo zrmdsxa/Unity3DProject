@@ -9,10 +9,13 @@ public class EnemyDamage : MonoBehaviour {
 	float nextDamage;
 
 
+	HealthScript enemyHealth;  
+
+
 	// Use this for initialization
 	void Start () {
 		nextDamage = 0f;
-		
+		enemyHealth = GetComponent<HealthScript>();
 	}
 	
 	// Update is called once per frame
@@ -20,7 +23,7 @@ public class EnemyDamage : MonoBehaviour {
 		
 	}
 	void OnTriggerEnter(Collider other){
-		if (other.tag == "Player" && nextDamage<Time.time){
+		if (other.tag == "Player" && nextDamage<Time.time && enemyHealth.m_currentHP > 0){
 			HealthScript thePlayerHealth = other.gameObject.GetComponent<HealthScript>();
 			thePlayerHealth.TakeDamage(damage);
 			nextDamage = Time.time + damageRate;

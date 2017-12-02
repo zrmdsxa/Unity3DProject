@@ -10,7 +10,7 @@ public class EnemySpawnerScript : MonoBehaviour
     public Transform[] m_spawns;
 
     public int m_numEnemiesToSpawn = 20;
-    public int m_maxEnemies = 10;
+    public int m_maxEnemies = 10;   //max active enemies allowed
 
     public float m_spawnDelay = 10.0f;
 
@@ -18,7 +18,9 @@ public class EnemySpawnerScript : MonoBehaviour
 
     int m_currentNumEnemies = 0;
 
-    int m_enemiesLeft;
+    int m_enemiesToSpawn;  //keep track of how many we need to spawn
+
+    int m_enemiesLeft;  //total enemies left to kill
 	
     float m_currentSpawnDelay = 10.0f;
 
@@ -35,13 +37,14 @@ public class EnemySpawnerScript : MonoBehaviour
             Destroy(gameObject);
         }
         m_enemiesLeft = m_numEnemiesToSpawn;
+        m_enemiesToSpawn = m_numEnemiesToSpawn;
 		UpdateText();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (m_enemiesLeft > 0)
+        if (m_enemiesToSpawn > 0)
         {
 
             if (m_currentSpawnDelay > 0.0f)
@@ -62,6 +65,7 @@ public class EnemySpawnerScript : MonoBehaviour
 
     void SpawnEnemy()
     {
+        m_enemiesToSpawn--;
         m_currentSpawnDelay = m_spawnDelay;
         GameObject enemy = Instantiate(m_enemies[Random.Range(0, m_enemies.Length)], m_spawns[Random.Range(0, m_spawns.Length)].position, Quaternion.identity);
         m_currentNumEnemies++;
@@ -71,11 +75,12 @@ public class EnemySpawnerScript : MonoBehaviour
     public void EnemyDied()
     {
         m_currentNumEnemies--;
+        m_enemiesLeft--;
+        
 		Debug.Log("current:"+m_currentNumEnemies+" left:"+m_enemiesLeft);
 		if(m_enemiesLeft <= 0 && m_currentNumEnemies <= 0){
 			GameManager.instance.GameWin();
 		}
-		m_enemiesLeft--;
 		UpdateText();
     }
 
