@@ -43,7 +43,7 @@ public class GrenadeScript : MonoBehaviour
     void OnDestroy()
     {
 		Destroy(Instantiate(m_explosionPrefab,transform.position,Quaternion.identity),3.0f);
-        Destroy(Instantiate(m_soundPrefab,transform.position,Quaternion.identity),3.0f);
+        Destroy(Instantiate(m_soundPrefab,transform.position,Quaternion.identity),1.0f);
         foreach (GameObject go in m_thingsInRange)
         {
             if (go != null)

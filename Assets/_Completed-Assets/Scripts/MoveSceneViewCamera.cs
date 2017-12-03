@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿/*
+using UnityEditor;
 using UnityEngine;
 
 public class MoveSceneViewCamera
@@ -13,3 +14,4 @@ public class MoveSceneViewCamera
         Selection.activeGameObject = Camera.main.gameObject;
     }
 }
+*/
