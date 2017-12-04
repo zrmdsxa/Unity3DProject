@@ -2,8 +2,6 @@
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-
 
 namespace CompleteProject
 {
