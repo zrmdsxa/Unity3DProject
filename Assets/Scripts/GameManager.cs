@@ -24,6 +24,8 @@ public class GameManager : MonoBehaviour
 
     public GameObject m_pauseMenu;
 
+    public GameObject m_controlsUI;
+
     //private
 
     float m_introTimer = 1.0f;
@@ -37,6 +39,8 @@ public class GameManager : MonoBehaviour
     GameObject m_currentPlayer = null;
 
     bool m_paused = false;
+
+    bool m_showControls = false;
 
     void Awake()
     {
@@ -225,5 +229,12 @@ public class GameManager : MonoBehaviour
         LockMouse();
         GameObject.Find("theme").GetComponent<AudioSource>().UnPause();
         m_pauseMenu.SetActive(false);
+    }
+
+    public void ToggleControlsUI(){
+        m_showControls = !m_showControls;
+
+        m_controlsUI.SetActive(m_showControls);
+        
     }
 }
