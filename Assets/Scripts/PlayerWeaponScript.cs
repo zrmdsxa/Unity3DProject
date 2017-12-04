@@ -17,6 +17,7 @@ public class PlayerWeaponScript : MonoBehaviour
     private bool m_hasWeapon = false;
 
     private GameObject m_closestItem = null;
+    
 
     private bool m_reloading = false;
 
@@ -129,7 +130,7 @@ public class PlayerWeaponScript : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
-        if (other.tag == "Weapon" || other.tag == "Ammo")
+        if (other.tag == "Weapon" || other.tag == "Ammo"|| other.tag == "PickUp")
         {
             m_closestItem = other.gameObject;
             m_pickupText.text = "Press <E> to pick up " + other.name;
@@ -216,6 +217,13 @@ public class PlayerWeaponScript : MonoBehaviour
                 m_storedAmmo[1] += 20;
                 m_storedAmmo[2] += 1;
                 Destroy(m_closestItem);
+                //Debug.Log("Picked up ammo");
+            }   else if (m_closestItem.tag == "PickUp")
+            {
+               
+                Destroy(m_closestItem);
+                GetComponent<HealthScript>().AddLives();
+                
                 //Debug.Log("Picked up ammo");
             }
 

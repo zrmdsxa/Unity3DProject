@@ -10,6 +10,7 @@ public class HealthScript : MonoBehaviour
     public float m_maxHP = 100f;
     public bool m_isPlayer = false;
     Animator anima;
+    
 
     public Image m_healthBar;
     public Text m_healthText;
@@ -150,6 +151,15 @@ public class HealthScript : MonoBehaviour
         EnemySpawnerScript.instance.EnemyDied();
         Destroy(Instantiate(enemydeath, transform.position, Quaternion.identity), 5f);
         Destroy(gameObject, 3f);
+    }
+    public void AddLives(){
+        m_currentHP += 10f;
+        if(m_currentHP > m_maxHP){
+            m_currentHP = m_maxHP;
+         
+
+        }
+           UpdateHealthBar();
     }
 
 }
